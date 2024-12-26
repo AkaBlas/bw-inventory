@@ -79,3 +79,10 @@ class Item(FrozenModel):
     def add_comment(self, comment: ItemComment) -> None:
         with self._unfrozen():
             self.comments += (comment,)
+
+    def resolved_photos(
+        self, prefix: PathLike, root: PathLike = INVENTORY_SETTINGS.inventory_path
+    ) -> tuple[Path, ...]:
+        directory = self.get_directory(root)
+
+        return tuple(Path(prefix) / directory.name / photo for photo in self.photos)

@@ -29,3 +29,10 @@ To run the bot, execute the following command:
 
     python -m bwi.bot
 
+To render the inventory, execute the following command:
+
+.. code-block:: bash
+
+    python -m bwi.render
+
+Then open the generated ``index.html`` file in a browser.

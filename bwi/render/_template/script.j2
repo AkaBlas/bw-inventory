@@ -1,0 +1,99 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabContent = document.querySelector('.inventory');
+        if (!tabContent) return;
+
+        function setupAccordion() {
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function () {
+                    const isOpen = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isOpen);
+                    this.parentElement.setAttribute('data-state', isOpen ? 'closed' : 'open');
+                    const content = this.nextElementSibling;
+                    if (content) {
+                        content.hidden = isOpen;
+                    }
+                });
+            });
+        }
+
+        function calculateNewScheme(currentScheme, systemPrefersDark) {
+            if (systemPrefersDark) {
+                if (currentScheme === "auto") return "light";
+                if (currentScheme === "light") return "dark";
+                return "auto";
+            } else {
+                if (currentScheme === "auto") return "dark";
+                if (currentScheme === "dark") return "light";
+                return "auto";
+            }
+        }
+
+        function toggleColorScheme() {
+            const savedColorScheme = localStorage.getItem("color-scheme") || "auto";
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            let newScheme = calculateNewScheme(savedColorScheme, prefersDarkScheme);
+            document.documentElement.setAttribute("data-color-scheme", newScheme);
+            localStorage.setItem("color-scheme", newScheme);
+        }
+
+        function setupColorScheme() {
+            // Restore scheme from localStorage
+            const savedColorScheme = localStorage.getItem("color-scheme") || "auto";
+            document.documentElement.setAttribute("data-color-scheme", savedColorScheme);
+
+            const colorSchemeToggle = document.querySelector('.color-scheme-toggle');
+            if (colorSchemeToggle) {
+                colorSchemeToggle.addEventListener('click', toggleColorScheme);
+            }
+        }
+
+        function setUpGalleries() {
+            const galleries = document.querySelectorAll('.gallery');
+            galleries.forEach(gallery => {
+                const uid = gallery.getAttribute('data-uid');
+                const popup = document.getElementById('popup-' + uid);
+                const fullImage = document.getElementById('fullImage-' + uid);
+                const close = document.getElementById('close-' + uid);
+                const left = document.getElementById('al-' + uid);
+                const right = document.getElementById('ar-' + uid);
+
+                let currentIndex = 0;
+                const images = Array.from(gallery.getElementsByTagName('img'));
+
+                gallery.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'IMG') {
+                        popup.style.display = 'block';
+                        fullImage.src = e.target.dataset.full;
+                        currentIndex = images.indexOf(e.target);
+                    }
+                });
+
+                close.addEventListener('click', () => {
+                    popup.style.display = 'none';
+                });
+
+                popup.addEventListener('click', (e) => {
+                    if (e.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+
+                left.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    fullImage.src = images[currentIndex].dataset.full;
+                });
+
+                right.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    fullImage.src = images[currentIndex].dataset.full;
+                });
+            });
+        }
+
+        setUpGalleries();
+        setupAccordion();
+        setupColorScheme();
+    });
+</script>
