@@ -37,13 +37,13 @@
         </header>
         <div class="inventory">
             {% for item in items %}
-                <div class="accordion" data-state="closed">
-                    <button class="accordion-header" aria-expanded="false"
+                <div class="accordion" data-state="open">
+                    <button class="accordion-header" aria-expanded="true"
                             aria-controls="item-{{ item.name.uid }}">
                         {{ item.name.slug }}
-                        <i data-lucide="chevron-down" class="lucide-icon lg accordion-icon"></i>
+                        <i data-lucide="chevron-up" class="lucide-icon lg accordion-icon"></i>
                     </button>
-                    <span class="accordion-content item" id="item-{{ item.name.uid }}" hidden>
+                    <span class="accordion-content item" id="item-{{ item.name.uid }}">
                         <h3>Beschreibung</h3>
                         <div class="text-block">
                             {{ item.description }}
@@ -85,6 +85,35 @@
                             </div>
                         {% endfor %}
 
+                        <!-- Field for adding new comment -->
+                        <form action="/inventory/{{ item.name.uid }}/comment" method="post"
+                              data-uid="{{ item.name.uid }}">
+                            <div class="item-comment">
+                                <div class="item-comment-author">
+                                    <textarea class="comment-author-input" name="comment-author"
+                                              data-uid="{{ item.name.uid }}"
+                                              rows=1 cols=50 placeholder="Name"></textarea>
+                                    <select class="comment-recommendation-input"
+                                            data-uid="{{ item.name.uid }}"
+                                            name="comment-recommendation"
+                                            id="item-{{ item.name.uid }}-comment-recommendation-input">
+                                        {% for enum in item_decision %}
+                                            <option value="{{ enum.value }}">{{ enum.value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="item-comment-content">
+                                    <textarea class="comment-content-input" name="comment-content"
+                                              data-uid="{{ item.name.uid }}"
+                                              id="item-{{ item.name.uid }}-comment-content-input"
+                                              rows=5 placeholder="Kommentar"></textarea>
+                                    <span>
+                                        <small>Kommentare werden gesammelt am Ende der Seite abgeschickt.</small>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+
                         <h3>Entscheidung</h3>
                         <div class="text-block">
                             <span class="icon-text">
@@ -96,6 +125,17 @@
             {% endfor %}
         </div>
     </div>
+    <footer>
+        <button type="submit" class="submit-button" id="comments-submit-button">Kommentare
+            abschicken
+        </button>
+        <p>
+         <span class="icon-text">
+             <i data-lucide="database-backup"
+                class="lucide-icon"></i>Zuletzt aktualisiert: {{ now.strftime("%d.%m.%Y %H:%M:%S") }}
+         </span>
+        </p>
+    </footer>
 </div>
 {% include 'icons_script.j2' %}
 {% include 'script.j2' %}

@@ -86,3 +86,9 @@ class Item(FrozenModel):
         directory = self.get_directory(root)
 
         return tuple(Path(prefix) / directory.name / photo for photo in self.photos)
+
+    def get_comment_by_author(self, author: str) -> ItemComment | None:
+        for comment in self.comments:
+            if comment.author == author:
+                return comment
+        return None

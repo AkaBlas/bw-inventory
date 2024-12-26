@@ -383,6 +383,24 @@ header.hidden {
     right: 20px;
 }
 
+/* Form */
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    border-radius: 5px;
+    background-color: var(--accent-hover-background);
+}
+
+.comment-author-input {
+    resize: none;
+    height: 1.5rem;
+}
+
+.comment-content-input {
+    width: 100%;
+}
+
 
 /* PAGE STYLES */
 .item {

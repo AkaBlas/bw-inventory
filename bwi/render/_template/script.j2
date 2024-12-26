@@ -92,6 +92,112 @@
             });
         }
 
+        function setUpForms() {
+            const commentAuthorAreas = document.querySelectorAll('textarea.comment-author-input');
+            const commentContentAreas = document.querySelectorAll('textarea.comment-content-input');
+            const commentRecommendationSelects = document.querySelectorAll('select.comment-recommendation-input');
+
+            commentAuthorAreas.forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                    const newValue = this.value;
+                    commentAuthorAreas.forEach(area => {
+                        if (area !== this) {
+                            area.value = newValue;
+                        }
+                    });
+
+                    // Store the value in localStorage
+                    localStorage.setItem('comment-author', newValue);
+                });
+            });
+
+            commentContentAreas.forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                    // Store the value in localStorage
+                    const uid = this.getAttribute("data-uid");
+                    const commentContents = JSON.parse(localStorage.getItem('comment-contents')) || {};
+                    commentContents[uid] = this.value;
+                    localStorage.setItem('comment-contents', JSON.stringify(commentContents));
+                });
+            });
+
+            commentRecommendationSelects.forEach(select => {
+                select.addEventListener('change', function () {
+                    // Store the value in localStorage
+                    const uid = this.getAttribute("data-uid");
+                    const commentRecommendations = JSON.parse(localStorage.getItem('comment-recommendations')) || {};
+                    commentRecommendations[uid] = this.value;
+                    localStorage.setItem('comment-recommendations', JSON.stringify(commentRecommendations));
+                });
+            });
+
+            // Restore values from localStorage
+            const savedAuthor = localStorage.getItem('comment-author');
+            const savedContents = JSON.parse(localStorage.getItem('comment-contents')) || {};
+            const savedRecommendations = JSON.parse(localStorage.getItem('comment-recommendations')) || {};
+            if (savedAuthor) {
+                commentAuthorAreas.forEach(area => {
+                    area.value = savedAuthor;
+                });
+
+                /* Probably not robust enough in case the localStorage differs from what's displayed
+                // Hide all item-comment elements where the item-comment-author is the saved author
+                const itemCommentAuthors = document.querySelectorAll('.item-comment-author');
+                itemCommentAuthors.forEach(author => {
+                    if (author.textContent.includes(savedAuthor)) {
+                        author.parentElement.style.display = 'none';
+                    }
+                });
+                */
+
+            }
+            commentContentAreas.forEach(area => {
+                const uid = area.getAttribute("data-uid");
+                if (savedContents[uid]) {
+                    area.value = savedContents[uid];
+                }
+            });
+            commentRecommendationSelects.forEach(select => {
+                const uid = select.getAttribute("data-uid");
+                if (savedRecommendations[uid]) {
+                    select.value = savedRecommendations[uid];
+                }
+            });
+
+
+            const submitButton = document.getElementById("comments-submit-button");
+            if (submitButton) {
+                submitButton.addEventListener("click", function () {
+                    const forms = document.querySelectorAll("form");
+                    // for each form, get uid, author name, content and recommendation
+                    const comments = Array.from(forms).map(form => {
+                        const uid = form.getAttribute("data-uid");
+                        const author = form.querySelector(".comment-author-input").value;
+                        const content = form.querySelector(".comment-content-input").value;
+                        const recommendation = form.querySelector(".comment-recommendation-input").value;
+                        return {uid, author, content, recommendation};
+                    });
+                    // write comments into TOML file and open Email to send
+                    // subject: Kommentare BW Inventory
+                    // body: TOML file as plain text
+                    // recipient: bwi@mahlerhome.de
+                    const commentsAsToml = comments.map(comment => {
+                        return `[[comments]]
+uid = "${comment.uid}"
+author = "${comment.author}"
+content = "${comment.content}"
+recommendation = "${comment.recommendation}"`;
+                    }).join("\n");
+                    const mailBody = `Hier meine Kommentare\n\n==============\nDO NOT CHANGE!\n==============\n\n${commentsAsToml}`;
+                    const mailto = `mailto:bwi@mahlerhome.de
+?subject=Kommentare%20BW%20Inventory
+&body=${encodeURIComponent(mailBody)}`;
+                    window.open(mailto);
+                });
+            }
+        }
+
+        setUpForms();
         setUpGalleries();
         setupAccordion();
         setupColorScheme();

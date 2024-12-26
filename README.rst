@@ -36,3 +36,10 @@ To render the inventory, execute the following command:
     python -m bwi.render
 
 Then open the generated ``index.html`` file in a browser.
+On the rendered page, the user can leave a comment for each item.
+The comments are sent via email to the inventory owner.
+To import the comments, the owner can run the following command:
+
+.. code-block:: bash
+
+    python -m bwi.models /path/to/comments.toml

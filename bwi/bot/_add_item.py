@@ -103,7 +103,7 @@ async def send_recommendation_keyboard(update: Update) -> States:
             [
                 InlineKeyboardButton("💾", callback_data=ItemDecision.KEEP_ITEM.name),
                 InlineKeyboardButton("🗑", callback_data=ItemDecision.DISCARD_ITEM.name),
-                InlineKeyboardButton("🎁", callback_data=ItemDecision.GIVEN_AWAY.name),
+                InlineKeyboardButton("🎁", callback_data=ItemDecision.GIVE_AWAY.name),
                 InlineKeyboardButton("❓", callback_data=ItemDecision.UNDECIDED.name),
             ]
         ),

@@ -5,3 +5,4 @@ pydantic-settings~=2.7
 python-telegram-bot~=21.9
 shortuuid~=1.0
 tomlkit~=0.13
+tzdata
