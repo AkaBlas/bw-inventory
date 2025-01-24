@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from telegram import BotCommandScopeAllGroupChats, BotCommandScopeAllPrivateChats
 from telegram.ext import Application, CallbackContext, ContextTypes, Defaults, ExtBot
 
 from .._utils.types import ADict
@@ -14,6 +15,9 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
 async def _post_init(application: Application[Any, Any, Any, Any, Any, Any]) -> None:
+    await application.bot.delete_my_commands()
+    await application.bot.delete_my_commands(BotCommandScopeAllPrivateChats())
+    await application.bot.delete_my_commands(BotCommandScopeAllGroupChats())
     await application.bot.set_my_commands(
         [
             ("add_item", "Add a new item to the inventory."),
