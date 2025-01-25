@@ -80,15 +80,17 @@
                     }
                 });
 
-                left.addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                    fullImage.src = images[currentIndex].dataset.full;
-                });
+                if (left !== null && right !== null) {
+                    left.addEventListener('click', () => {
+                        currentIndex = (currentIndex - 1 + images.length) % images.length;
+                        fullImage.src = images[currentIndex].dataset.full;
+                    });
 
-                right.addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % images.length;
-                    fullImage.src = images[currentIndex].dataset.full;
-                });
+                    right.addEventListener('click', () => {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        fullImage.src = images[currentIndex].dataset.full;
+                    });
+                }
             });
         }
 

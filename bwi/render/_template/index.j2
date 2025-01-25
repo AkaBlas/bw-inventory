@@ -62,10 +62,14 @@
                           <img id="fullImage-{{ item.name.uid }}" src="" alt="Full-size image">
                           <span class="close" id="close-{{ item.name.uid }}"><i data-lucide="x"
                                                                                 class="lucide-icon lg"></i></span>
-                          <span class="arrow left" id="al-{{ item.name.uid }}"><i
-                                  data-lucide="chevron-left" class="lucide-icon lg"></i></span>
-                          <span class="arrow right" id="ar-{{ item.name.uid }}"><i
-                                  data-lucide="chevron-right" class="lucide-icon lg"></i></span>
+                            {% if (item.resolved_photos("/inventary")|length) > 1 %}
+                                <span class="arrow left" id="al-{{ item.name.uid }}"><i
+                                        data-lucide="chevron-left"
+                                        class="lucide-icon lg"></i></span>
+                                <span class="arrow right" id="ar-{{ item.name.uid }}"><i
+                                        data-lucide="chevron-right"
+                                        class="lucide-icon lg"></i></span>
+                            {% endif %}
                         </div>
 
                         <h3>Kommentare</h3>
