@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>BW Inventory</title>
+    <title>Bültenweg Inventar 25.01.2025</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0">
     <style>
@@ -15,7 +15,7 @@
         <header>
             <h1>
                 <div class="vcenter-flex">
-                    BW Inventory
+                    Bültenweg Inventar 25.01.2025
                     <div class="color-scheme-toggle-container">
                         <button class="color-scheme-toggle">
                             <div class="color-scheme-icon-when-auto-light">
@@ -72,7 +72,7 @@
                             {% endif %}
                         </div>
 
-                        <h3>Kommentare</h3>
+                        <h3>Kommentare/Empfehlungen</h3>
                         {% for comment in item.comments %}
                             <div class="item-comment">
                                 <div class="item-comment-author">
@@ -81,11 +81,18 @@
                                         {{ render_decision(comment.recommendation) }}
                                     </div>
                                 </div>
-                                <div class="item-comment-content">
-                                    <span>
-                                    {{ comment.content }}
-                                    </span>
-                                </div>
+                                {% if comment.content %}
+                                    <div class="item-comment-content">
+                                        <span>
+                                        {{ comment.content }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                {#                                <div class="item-comment-content">#}
+{#                                    <span>#}
+{#                                    {{ comment.content }}#}
+{#                                    </span>#}
+{#                                </div>#}
                             </div>
                         {% endfor %}
 
