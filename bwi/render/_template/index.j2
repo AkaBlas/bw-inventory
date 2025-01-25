@@ -88,11 +88,6 @@
                                         </span>
                                     </div>
                                 {% endif %}
-                                {#                                <div class="item-comment-content">#}
-{#                                    <span>#}
-{#                                    {{ comment.content }}#}
-{#                                    </span>#}
-{#                                </div>#}
                             </div>
                         {% endfor %}
 
@@ -109,7 +104,7 @@
                                             name="comment-recommendation"
                                             id="item-{{ item.name.uid }}-comment-recommendation-input">
                                         {% for enum in item_decision %}
-                                            <option value="{{ enum.value }}">{{ enum.value }}</option>
+                                            <option value="{{ enum.value }}" {{ "selected" if enum.value == "unentschlossen" else "" }}>{{ enum.value }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -137,11 +132,16 @@
         </div>
     </div>
     <footer>
-        <button type="submit" class="submit-button" id="comments-submit-button">Kommentare
-            abschicken
-        </button>
-        <p>
-         <span class="icon-text">
+        <h3>Kommentare Abschicken</h3>
+        <div class="submit-wrapper">
+            <button type="submit" class="submit-button" id="comments-download-button">
+                1. Kommentar-Datei Herunterladen
+            </button>
+            <button type="submit" class="submit-button" id="comments-submit-button">
+                2. Mail Schreiben. Bitte die Datei anhängen.
+            </button>
+        </div>
+        <span class="icon-text">
              <i data-lucide="database-backup"
                 class="lucide-icon"></i>Zuletzt aktualisiert: {{ now.strftime("%d.%m.%Y %H:%M:%S") }}
          </span>

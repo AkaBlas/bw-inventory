@@ -166,23 +166,22 @@
                 }
             });
 
-
-            const submitButton = document.getElementById("comments-submit-button");
-            if (submitButton) {
-                submitButton.addEventListener("click", function () {
-                    const forms = document.querySelectorAll("form");
-                    // for each form, get uid, author name, content and recommendation
-                    const comments = Array.from(forms).map(form => {
+            const downloadButton = document.getElementById("comments-download-button");
+            if (downloadButton) {
+                downloadButton.addEventListener("click", function () {
+                    const comments = Array.from(document.querySelectorAll("form")).map(form => {
                         const uid = form.getAttribute("data-uid");
                         const author = form.querySelector(".comment-author-input").value;
                         const content = form.querySelector(".comment-content-input").value;
                         const recommendation = form.querySelector(".comment-recommendation-input").value;
                         return {uid, author, content, recommendation};
                     });
-                    // write comments into TOML file and open Email to send
-                    // subject: Kommentare BW Inventory
-                    // body: TOML file as plain text
-                    // recipient: bwi@mahlerhome.de
+
+                    if (!comments[0].author) {
+                        alert("Bitte gib über dem Kommentar-Feld einen Namen ein.");
+                        return;
+                    }
+
                     const commentsAsToml = comments.map(comment => {
                         return `[[comments]]
 uid = "${comment.uid}"
@@ -190,9 +189,23 @@ author = "${comment.author}"
 content = "${comment.content}"
 recommendation = "${comment.recommendation}"`;
                     }).join("\n");
-                    const mailBody = `Hier meine Kommentare\n\n==============\nDO NOT CHANGE!\n==============\n\n${commentsAsToml}`;
+                    const blob = new Blob([commentsAsToml], {type: 'application/toml'});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'comments.toml';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            }
+
+
+            const submitButton = document.getElementById("comments-submit-button");
+            if (submitButton) {
+                submitButton.addEventListener("click", function () {
+                    const mailBody = `Im Anhang sind meine Kommentare.`;
                     const mailto = `mailto:bwi@mahlerhome.de
-?subject=Kommentare%20BW%20Inventory
+?subject=Kommentare%20BW%20Inventarisierung
 &body=${encodeURIComponent(mailBody)}`;
                     window.open(mailto);
                 });
