@@ -182,11 +182,16 @@
                         return;
                     }
 
+                    function escapeTomlString(str) {
+                        // Escape " to \" and write newlines as \n
+                        return str.replace(/"/g, '\\"').replace(/\n/g, '\\n');
+                    }
+
                     const commentsAsToml = comments.map(comment => {
                         return `[[comments]]
 uid = "${comment.uid}"
 author = "${comment.author}"
-content = "${comment.content}"
+content = "${escapeTomlString(comment.content)}"
 recommendation = "${comment.recommendation}"`;
                     }).join("\n");
                     const blob = new Blob([commentsAsToml], {type: 'application/toml'});
