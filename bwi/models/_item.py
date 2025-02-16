@@ -1,4 +1,5 @@
 import tomllib
+from collections import Counter
 from pathlib import Path
 from typing import Annotated, Any, Self
 
@@ -92,3 +93,22 @@ class Item(FrozenModel):
             if comment.author == author:
                 return comment
         return None
+
+    def update_decision(self) -> None:
+        recommendations = Counter(c.recommendation for c in self.comments)
+        # pick the most common recommendation. If there are multiple with the same number,
+        # use the order keep, give away, throw away
+        decision = max(
+            recommendations,
+            key=lambda r: (
+                recommendations[r],
+                (
+                    ItemDecision.KEEP_ITEM,
+                    ItemDecision.GIVE_AWAY,
+                    ItemDecision.DISCARD_ITEM,
+                    ItemDecision.UNDECIDED,
+                ).index(r),
+            ),
+        )
+        with self._unfrozen():
+            self.decision = decision

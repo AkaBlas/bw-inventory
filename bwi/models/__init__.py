@@ -6,6 +6,7 @@ __all__ = [
     "ItemName",
     "load_all",
     "merge_comment_inputs_into_inventory",
+    "update_decisions",
 ]
 
 from pathlib import Path
@@ -23,3 +24,9 @@ def load_all() -> tuple[Item, ...]:
 
 def merge_comment_inputs_into_inventory(path: PathLike) -> None:
     ItemCommentInputs.from_drive(Path(path)).merge_into_inventory()
+
+
+def update_decisions() -> None:
+    for item in load_all():
+        item.update_decision()
+        item.write_to_file()
