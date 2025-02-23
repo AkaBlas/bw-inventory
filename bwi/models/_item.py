@@ -96,19 +96,21 @@ class Item(FrozenModel):
 
     def update_decision(self) -> None:
         recommendations = Counter(c.recommendation for c in self.comments)
-        # pick the most common recommendation. If there are multiple with the same number,
-        # use the order keep, give away, throw away
+        # Following logic for choosing the decision:
+        # compute the most common recommendation.
+        # If there are multiple with the same number or the most common is "UNDECIDED",
+        # then pick in the order keep, give away, throw away
         decision = max(
             recommendations,
             key=lambda r: (
-                recommendations[r],
+                recommendations[r] if r != ItemDecision.UNDECIDED else 0,
                 (
-                    ItemDecision.KEEP_ITEM,
-                    ItemDecision.GIVE_AWAY,
-                    ItemDecision.DISCARD_ITEM,
-                    ItemDecision.UNDECIDED,
-                ).index(r),
+                    recommendations[ItemDecision.KEEP_ITEM],
+                    recommendations[ItemDecision.GIVE_AWAY],
+                    recommendations[ItemDecision.DISCARD_ITEM],
+                ),
             ),
         )
+
         with self._unfrozen():
             self.decision = decision

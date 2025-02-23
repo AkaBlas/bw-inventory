@@ -39,8 +39,10 @@
         <ul class="original">
             <li>
                 <a href="#KEEP_ITEM"><b>{{ item_decision.KEEP_ITEM.value.capitalize() }}</b></a>:
-                Diese Dinge werden weiter im Bültenweg bleiben. Vielleicht interessiert es Dich
-                trotzdem, was da alles so ist.
+                Diese Dinge sollen weiter im Bültenweg bleiben. Vielleicht interessiert es Dich
+                trotzdem, was da alles so ist. Wenn Du hiervon etwas ganz dringend mit nach Hause
+                nehmen möchtest (z.B. ein paar alte Festschriften), kannst Du Dich trotzdem gerne
+                melden.
             </li>
             <li>
                 <a href="#DISCARD_ITEM"><b>{{ item_decision.DISCARD_ITEM.value.capitalize() }}</b></a>:
@@ -50,13 +52,14 @@
             </li>
             <li>
                 <a href="#GIVE_AWAY"><b>{{ item_decision.GIVE_AWAY.value.capitalize() }}</b></a>:
-                Diese Dinge sind zu schade zum Wegwerfen, haben aber auch keinen akuten Nuten für
-                AkaBlas mehr. Sie suchen ein neues Zuhause. First come, first serve!
+                Diese Dinge sind zu schade zum Wegwerfen, haben aber auch keinen akuten Nutzen für
+                AkaBlas mehr. Sie suchen ein neues Zuhause, ggf. auch über Kleinanzeigen.
+                First come, first serve!
             </li>
-            <li>
-                <a href="#UNDECIDED"><b>{{ item_decision.UNDECIDED.value.capitalize() }}</b></a>:
-                Für diese Dinge konnte noch keine Entscheidung getroffen werden.
-            </li>
+            {#            <li>#}
+            {#                <a href="#UNDECIDED"><b>{{ item_decision.UNDECIDED.value.capitalize() }}</b></a>:#}
+            {#                Für diese Dinge konnte noch keine Entscheidung getroffen werden.#}
+            {#            </li>#}
         </ul>
         <div class="inventory">
             {% for decision, items in grouped_items.items() %}
@@ -110,6 +113,25 @@
                                                     class="lucide-icon lg"></i></span>
                                         {% endif %}
                                     </div>
+
+                                    <h3>Kommentare/Empfehlungen</h3>
+                                    {% for comment in item.comments %}
+                                        <div class="item-comment">
+                                            <div class="item-comment-author">
+                                                {{ comment.author }}
+                                                <div class="icon-text">
+                                                    {{ render_decision(comment.recommendation) }}
+                                                </div>
+                                            </div>
+                                            {% if comment.content %}
+                                                <div class="item-comment-content">
+                                                    <span>
+                                                    {{ comment.content }}
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
                                 </span>
                             </div>
                         {% endfor %}

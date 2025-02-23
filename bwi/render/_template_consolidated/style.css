@@ -40,6 +40,10 @@ html, body {
     margin: 0;
 }
 
+a:link, a:visited {
+    color: var(--link);
+}
+
 .color-scheme-toggle div {
     color: var(--text);
     display: none;
