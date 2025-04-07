@@ -112,7 +112,7 @@ async def send_recommendation_keyboard(update: Update) -> States:
 
 
 async def parse_item_comments(update: Update, context: CONTEXT_TYPE) -> States:
-    comment = cast(str, cast(Message, update.effective_message).text)
+    comment = cast("str", cast("Message", update.effective_message).text)
     context.chat_data["comment"] = ItemComment(
         author=context.bot_data.default_author, content=comment
     )
@@ -125,7 +125,7 @@ async def skip_comment(update: Update, context: CONTEXT_TYPE) -> States:
 
 
 async def parse_recommendation(update: Update, context: CONTEXT_TYPE) -> States:
-    recommendation = ItemDecision[cast(str, update.callback_query.data)]
+    recommendation = ItemDecision[cast("str", update.callback_query.data)]
     comment = context.chat_data["comment"]
     comment.set_recommendation(recommendation)
 
